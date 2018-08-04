@@ -11,6 +11,7 @@ import (
 	"flag"
 	"github.com/ilkinulas/youtube-podcast/version"
 	"github.com/ilkinulas/youtube-podcast/storage"
+	"github.com/ilkinulas/youtube-podcast/download"
 )
 
 var (
@@ -38,6 +39,9 @@ func main() {
 	if err != nil {
 		logger.Fatalf("Failed to initialize storage, %v", err)
 	}
+
+	downloadService := download.NewService(ctx, storage, logger)
+	go downloadService.Loop()
 
 	server := httpserver.NewServer(ctx, listenAddr, logger, storage)
 	if err := server.Start(); err != nil && err != http.ErrServerClosed {

@@ -57,7 +57,8 @@ func (q *SqliteQueue) NextUrl() (string, error) {
 	row := q.db.QueryRow(nextUrlSql)
 	var url string
 	err := row.Scan(&url)
-	if err != nil {
+
+	if err != nil && err != sql.ErrNoRows {
 		return "", err
 	}
 	return url, nil
