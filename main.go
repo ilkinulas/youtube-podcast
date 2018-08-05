@@ -40,7 +40,9 @@ func main() {
 		logger.Fatalf("Failed to initialize storage, %v", err)
 	}
 
-	downloadService := download.NewService(ctx, storage, logger)
+	downloader := download.NewPythonDownloader(logger)
+
+	downloadService := download.NewService(ctx, storage, downloader, logger)
 	go downloadService.Loop()
 
 	server := httpserver.NewServer(ctx, listenAddr, logger, storage)

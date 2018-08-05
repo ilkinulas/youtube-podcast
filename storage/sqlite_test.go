@@ -14,7 +14,7 @@ func Test_NextUrl_Should_Return_Error_If_Table__Is_Empty(t *testing.T) {
 
 	url, err := storage.NextUrl()
 	assert.Equal(t, "", url)
-	assert.Error(t, err)
+	assert.NoError(t, err)
 }
 
 func Test_NextUrl_Should_Return_Oldest_Url(t *testing.T) {
@@ -33,4 +33,13 @@ func Test_NextUrl_Should_Return_Oldest_Url(t *testing.T) {
 	url, err = storage.NextUrl()
 	assert.NoError(t, err)
 	assert.Equal(t, "http://youtube.com/2", url)
+}
+
+func Test_Url_Must_Be_Unique(t *testing.T) {
+	f, _ := ioutil.TempFile("", "")
+	storage, _ := NewSqliteStorage(f.Name())
+
+	url := "http://youtube.com/1"
+	assert.NoError(t, storage.Add(url))
+	assert.Error(t, storage.Add(url))
 }
