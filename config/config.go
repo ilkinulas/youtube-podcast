@@ -1,6 +1,9 @@
 package config
 
-import "github.com/BurntSushi/toml"
+import (
+	"github.com/BurntSushi/toml"
+	"time"
+)
 
 type Config struct {
 	ListenAddr string
@@ -9,11 +12,12 @@ type Config struct {
 }
 
 type S3 struct {
-	Endpoint string
-	Regioin  string
-	Bucket   string
-	Key      string
-	Secret   string
+	Endpoint             string
+	Regioin              string
+	Bucket               string
+	Key                  string
+	Secret               string
+	PresignedUrlDuration duration
 }
 
 func LoadConfig(configFile string) (*Config, error) {
@@ -22,4 +26,14 @@ func LoadConfig(configFile string) (*Config, error) {
 		return nil, err
 	}
 	return &config, nil
+}
+
+type duration struct {
+	time.Duration
+}
+
+func (d *duration) UnmarshalText(text []byte) error {
+	var err error
+	d.Duration, err = time.ParseDuration(string(text))
+	return err
 }

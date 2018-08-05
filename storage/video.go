@@ -8,6 +8,7 @@ type Video struct {
 	Title     string `json:title`
 	Length    int    `json:length`
 	Thumbnail string `json:thumb`
+	PublicUrl string
 }
 
 func NewVideo(s string) (Video, error) {
