@@ -20,3 +20,6 @@ Video downloader:
 * videos are stored in a cloud storage (AWS S3)
 
 
+### DEV ENVIRONMENT
+ TMPDIR=/private$TMPDIR SERVICES=s3 docker-compose -f docker/localstack-docker-compose.yml up -d
+

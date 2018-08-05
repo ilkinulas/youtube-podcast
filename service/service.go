@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/ilkinulas/youtube-podcast/storage"
+	"os"
 )
 
 type Service struct {
@@ -77,8 +78,15 @@ func (s *Service) handleNextUrl() error {
 	}
 	video.PublicUrl = uploadUrl
 	s.logger.Printf("Upload url : %v", uploadUrl)
-	// update storage
 
+	if err := s.storage.SaveVideo(*video); err != nil {
+		return err
+	}
+
+	err = os.Remove(video.Filename)
+	if err != nil {
+		s.logger.Printf("Failed to remove video file. %v", err)
+	}
 	return nil
 }
 

@@ -18,12 +18,13 @@ CREATE TABLE IF NOT EXISTS urls (
 	createVideosTable = `
 CREATE TABLE IF NOT EXISTS videos (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	url VARCHAR(256) NOT NULL,
+	youtube_url VARCHAR(256) NOT NULL,
 	title VARCHAR(512) NOT NULL,
 	duration INTEGER DEFAULT 0,
 	thumbnail VARCHAR(256) DEFAULT "",
 	author VARCHAR(256) DEFAULT "",
-	downloadUrl VARCHAR (256) DEFAULT ""
+	download_url VARCHAR (256) DEFAULT "",
+	created_at datetime default current_timestamp
 )
 `
 
@@ -31,7 +32,7 @@ CREATE TABLE IF NOT EXISTS videos (
 	setUrlStatusSql = `UPDATE urls SET status=? WHERE url=?`
 	nextUrlSql      = `SELECT url FROM urls where status=0 ORDER BY id ASC limit 1`
 
-	saveVideoSql = `INSERT INTO videos (url, title, duration, thumbnail) VALUES (?,?,?,?)`
+	saveVideoSql = `INSERT INTO videos (youtube_url, title, duration, thumbnail, author, download_url) VALUES (?,?,?,?,?,?)`
 )
 
 type SqliteStorage struct {
@@ -72,11 +73,11 @@ func (s *SqliteStorage) setStatus(url string, status int) error {
 }
 
 func (s *SqliteStorage) Downloaded(url string) error {
-	return s.setStatus(url, URL_STATUS_DOWNLOADED)
+	return s.setStatus(url, UrlStatusDownloaded)
 }
 
 func (s *SqliteStorage) DownloadFailed(url string) error {
-	return s.setStatus(url, URL_STATUS_DOWNLOAD_FAILED)
+	return s.setStatus(url, UrlStatusDownloadFailed)
 }
 
 func (s *SqliteStorage) NextUrl() (string, error) {
@@ -93,6 +94,14 @@ func (s *SqliteStorage) NextUrl() (string, error) {
 func (s *SqliteStorage) SaveVideo(v Video) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	_, err := s.db.Exec(saveVideoSql, v.Url, v.Title, v.Length, v.Thumbnail)
+	_, err := s.db.Exec(
+		saveVideoSql,
+		v.YoutubeUrl,
+		v.Title,
+		v.Length,
+		v.Thumbnail,
+		v.Author,
+		v.PublicUrl,
+	)
 	return err
 }

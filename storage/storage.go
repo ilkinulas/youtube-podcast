@@ -9,7 +9,7 @@ type Storage interface {
 }
 
 const (
-	URL_STATUS_NEW             = 0
-	URL_STATUS_DOWNLOADED      = 1
-	URL_STATUS_DOWNLOAD_FAILED = 2
+	UrlStatusNew            = 0
+	UrlStatusDownloaded     = 1
+	UrlStatusDownloadFailed = 2
 )

@@ -72,13 +72,13 @@ func (u *S3Uploader) Upload(video storage.Video) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("failed to upload file, %v", err)
 	}
-	fmt.Printf("file uploaded to, %v\n", result.Location)
+	u.logger.Printf("file uploaded to, %v\n", result.Location)
 
 	return u.getPresignedUrl(s3Session, key)
 }
 
 func (u *S3Uploader) generateS3Key(video storage.Video) (string, error) {
-	pUrl, err := url.Parse(video.Url)
+	pUrl, err := url.Parse(video.YoutubeUrl)
 	if err != nil {
 		return "", err
 	}
@@ -90,7 +90,7 @@ func (u *S3Uploader) generateS3Key(video storage.Video) (string, error) {
 	if id, ok := values["v"]; ok {
 		return id[0], nil
 	}
-	return "", fmt.Errorf("failed to extract video id from url %q", video.Url)
+	return "", fmt.Errorf("failed to extract video id from url %q", video.YoutubeUrl)
 }
 
 func (u *S3Uploader) getPresignedUrl(session *session.Session, key string) (string, error) {
