@@ -3,10 +3,11 @@ package storage
 import "encoding/json"
 
 type Video struct {
-	Url         string `json:url`
-	Title       string `json:title`
-	Length      int    `json:length`
-	Thumbnail   string `json:thumb`
+	Filename  string `json:filename`
+	Url       string `json:url`
+	Title     string `json:title`
+	Length    int    `json:length`
+	Thumbnail string `json:thumb`
 }
 
 func NewVideo(s string) (Video, error) {

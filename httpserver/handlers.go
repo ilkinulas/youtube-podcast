@@ -1,9 +1,10 @@
 package httpserver
 
 import (
-	"net/http"
-	"github.com/ilkinulas/youtube-podcast/storage"
 	"fmt"
+	"net/http"
+
+	"github.com/ilkinulas/youtube-podcast/storage"
 )
 
 func SaveUrl(storage storage.Storage) http.Handler {
@@ -19,12 +20,12 @@ func SaveUrl(storage storage.Storage) http.Handler {
 			return
 		}
 		println(url)
-		w.Write([] byte("OK"))
+		w.Write([]byte("OK"))
 	})
 }
 
 func Index() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Write([] byte("Index"))
+		w.Write([]byte("Index"))
 	})
 }

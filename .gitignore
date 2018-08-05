@@ -2,3 +2,5 @@
 urls.db
 youtube-podcast
 venv
+run.sh
+config-ilkin.toml

@@ -1,9 +1,10 @@
 package storage
 
 import (
-	_ "github.com/mattn/go-sqlite3"
 	"database/sql"
 	"sync"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 const (

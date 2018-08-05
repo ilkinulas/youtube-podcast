@@ -1,11 +1,12 @@
-package download
+package service
 
 import (
-	"github.com/ilkinulas/youtube-podcast/storage"
-	"log"
 	"context"
-	"time"
 	"fmt"
+	"log"
+	"time"
+
+	"github.com/ilkinulas/youtube-podcast/storage"
 )
 
 type Service struct {
@@ -13,14 +14,22 @@ type Service struct {
 	logger     *log.Logger
 	ctx        context.Context
 	downloader Downloader
+	uploader   Uploader
 }
 
-func NewService(ctx context.Context, storage storage.Storage, downloader Downloader, logger *log.Logger) *Service {
+func NewService(
+	ctx context.Context,
+	storage storage.Storage,
+	downloader Downloader,
+	uploader Uploader,
+	logger *log.Logger,
+) *Service {
 	return &Service{
 		ctx:        ctx,
 		storage:    storage,
 		logger:     logger,
 		downloader: downloader,
+		uploader:   uploader,
 	}
 }
 
@@ -62,7 +71,12 @@ func (s *Service) handleNextUrl() error {
 	}
 	s.logger.Printf("Video Downloaded ! %v", video.Title)
 	// upload video
+	uploadUrl, err := s.uploader.Upload(video.Filename)
+	if err != nil {
+		s.logger.Printf("Failed to upload file %q, %v", video.Filename, err)
+	}
 
+	s.logger.Printf("Upload url : %v", uploadUrl)
 	// update storage
 
 	return nil

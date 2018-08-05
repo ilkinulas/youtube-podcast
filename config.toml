@@ -1,0 +1,9 @@
+ListenAddr = ":9898"
+DbFile = "urls.db"
+
+[S3]
+Endpoint = ""
+Region = ""
+Bucket = ""
+Key = ""
+Secret = ""
