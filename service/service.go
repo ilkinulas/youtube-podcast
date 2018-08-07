@@ -66,10 +66,6 @@ func (s *Service) handleNextUrl() error {
 		}
 		return fmt.Errorf("failed to download url %v. %v", url, err)
 	}
-	err = s.storage.Downloaded(url)
-	if err != nil {
-		return fmt.Errorf("failed to mark url %v as downloaded. %v", url, err)
-	}
 	s.logger.Printf("Video Downloaded ! %v", video.Title)
 
 	uploadUrl, err := s.uploader.Upload(*video)
@@ -77,7 +73,7 @@ func (s *Service) handleNextUrl() error {
 		return fmt.Errorf("failed to upload file %q, %v", video.Filename, err)
 	}
 	video.PublicUrl = uploadUrl
-	s.logger.Printf("Upload url : %v", uploadUrl)
+	s.logger.Printf("Video uploaded to url  %v", uploadUrl)
 
 	if err := s.storage.SaveVideo(*video); err != nil {
 		return err
@@ -86,6 +82,11 @@ func (s *Service) handleNextUrl() error {
 	err = os.Remove(video.Filename)
 	if err != nil {
 		s.logger.Printf("Failed to remove video file. %v", err)
+	}
+
+	err = s.storage.Downloaded(url)
+	if err != nil {
+		return fmt.Errorf("failed to mark url %v as downloaded. %v", url, err)
 	}
 	return nil
 }

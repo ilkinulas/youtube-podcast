@@ -20,6 +20,7 @@ func NewServer(ctx context.Context, listenAddr string, logger *log.Logger, stora
 	router := http.NewServeMux()
 	router.Handle("/", Index())
 	router.Handle("/save", SaveUrl(storage))
+	router.Handle("/rss", Rss(logger, storage))
 
 	server := &http.Server{
 		Addr:         listenAddr,

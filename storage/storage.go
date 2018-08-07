@@ -6,6 +6,7 @@ type Storage interface {
 	DownloadFailed(url string) error
 	NextUrl() (string, error)
 	SaveVideo(v Video) error
+	SelectVideos() ([]Video, error)
 }
 
 const (

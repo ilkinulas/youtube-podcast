@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	_ "github.com/mattn/go-sqlite3"
+	"time"
 )
 
 const (
@@ -32,7 +33,8 @@ CREATE TABLE IF NOT EXISTS videos (
 	setUrlStatusSql = `UPDATE urls SET status=? WHERE url=?`
 	nextUrlSql      = `SELECT url FROM urls where status=0 ORDER BY id ASC limit 1`
 
-	saveVideoSql = `INSERT INTO videos (youtube_url, title, duration, thumbnail, author, download_url) VALUES (?,?,?,?,?,?)`
+	saveVideoSql       = `INSERT INTO videos (youtube_url, title, duration, thumbnail, author, download_url) VALUES (?,?,?,?,?,?)`
+	selectAllVideosSql = `SELECT * FROM videos`
 )
 
 type SqliteStorage struct {
@@ -104,4 +106,37 @@ func (s *SqliteStorage) SaveVideo(v Video) error {
 		v.PublicUrl,
 	)
 	return err
+}
+
+func (s *SqliteStorage) SelectVideos() ([]Video, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	rows, err := s.db.Query(selectAllVideosSql)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var videos []Video
+	for rows.Next() {
+		var video Video
+		var createdAt time.Time
+		id := 0
+		err := rows.Scan(
+			&id,
+			&video.YoutubeUrl,
+			&video.Title,
+			&video.Length,
+			&video.Thumbnail,
+			&video.Author,
+			&video.PublicUrl,
+			&createdAt)
+
+		if err != nil {
+			return nil, err
+		}
+		videos = append(videos, video)
+
+	}
+	return videos, nil
 }

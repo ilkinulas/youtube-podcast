@@ -60,6 +60,12 @@
   version = "v1.38.1"
 
 [[projects]]
+  name = "github.com/gorilla/feeds"
+  packages = ["."]
+  revision = "6edcbcd2d57fd0bbd7f39947a593ed0c06648388"
+  version = "v1.1.0"
+
+[[projects]]
   name = "github.com/jmespath/go-jmespath"
   packages = ["."]
   revision = "0b12d6b5"
@@ -85,6 +91,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "3ea904f223dc11b858975781350b6b12306bd9054beda7db6ec996218e670c44"
+  inputs-digest = "5e18e2b8aad072f72bb03faa76d0074575818745a85500d8270c0014537b4c84"
   solver-name = "gps-cdcl"
   solver-version = 1

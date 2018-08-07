@@ -5,6 +5,9 @@ import (
 	"net/http"
 
 	"github.com/ilkinulas/youtube-podcast/storage"
+	"github.com/gorilla/feeds"
+	"log"
+	"github.com/ilkinulas/youtube-podcast/version"
 )
 
 func SaveUrl(storage storage.Storage) http.Handler {
@@ -24,8 +27,45 @@ func SaveUrl(storage storage.Storage) http.Handler {
 	})
 }
 
+func Rss(log *log.Logger, storage storage.Storage) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		videos, err := storage.SelectVideos()
+		if err != nil {
+			http.Error(w, fmt.Sprintf("Failed to fetch videos from storage, %v", err), http.StatusInternalServerError)
+			return
+		}
+		feed := &feeds.Feed{
+			Title: "Ilkin's youtube podcast",
+			Link: &feeds.Link{
+				Href: "https://ilkinulas.github.io",
+			},
+		}
+
+		var feedItems []*feeds.Item
+		for _, video := range videos {
+			item := &feeds.Item{
+				Title:       video.Title,
+				Description: video.Thumbnail,
+				Link: &feeds.Link{
+					Href: video.PublicUrl,
+				},
+			}
+			feedItems = append(feedItems, item)
+		}
+		if len(feedItems) > 0 {
+			feed.Items = feedItems
+		}
+		rss, err := feed.ToRss()
+		if err != nil {
+			log.Fatal(err)
+		}
+		w.Write([]byte(rss))
+	})
+}
+
 func Index() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Index"))
+		versionStr := fmt.Sprintf("Youtube Podcast App %v", version.GetHumanVersion())
+		w.Write([]byte(versionStr))
 	})
 }
