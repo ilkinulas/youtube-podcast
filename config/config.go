@@ -13,7 +13,7 @@ type Config struct {
 
 type S3 struct {
 	Endpoint             string
-	Regioin              string
+	Region               string
 	Bucket               string
 	Key                  string
 	Secret               string

@@ -22,4 +22,9 @@ Video downloader:
 
 ### DEV ENVIRONMENT
  TMPDIR=/private$TMPDIR SERVICES=s3 docker-compose -f docker/localstack-docker-compose.yml up -d
+ 
+
+Requirements
+ * pip install pafy
+ * pip install youtube-dl
 
