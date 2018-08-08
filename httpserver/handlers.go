@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/feeds"
 	"log"
 	"github.com/ilkinulas/youtube-podcast/version"
+	"time"
 )
 
 func SaveUrl(storage storage.Storage) http.Handler {
@@ -48,6 +49,14 @@ func Rss(log *log.Logger, storage storage.Storage) http.Handler {
 				Description: video.Thumbnail,
 				Link: &feeds.Link{
 					Href: video.PublicUrl,
+				},
+				Id: "test1",
+				Created: time.Now(),
+				Updated: time.Now(),
+				Enclosure: &feeds.Enclosure{
+					Length: fmt.Sprintf("%v", video.Length),
+					Url:    video.PublicUrl,
+					Type:   "video/mpeg",
 				},
 			}
 			feedItems = append(feedItems, item)

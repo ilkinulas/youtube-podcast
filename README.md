@@ -23,6 +23,7 @@ Video downloader:
 ### DEV ENVIRONMENT
  TMPDIR=/private$TMPDIR SERVICES=s3 docker-compose -f docker/localstack-docker-compose.yml up -d
  
+ aws --endpoint-url=http://localhost:4572 s3api create-bucket --bucket ilkinulas-youtube-podcast 
 
 Requirements
  * pip install pafy
