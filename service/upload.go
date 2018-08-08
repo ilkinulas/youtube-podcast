@@ -34,7 +34,7 @@ func NewS3Uploader(cfg config.S3, logger *log.Logger) Uploader {
 func (u *S3Uploader) Upload(video storage.Video) (string, error) {
 	u.logger.Printf("Uploading file %q to bucket %q", video.Filename, u.cfg.Bucket)
 	awsCfg := aws.NewConfig().
-		WithRegion(u.cfg.Regioin).
+		WithRegion(u.cfg.Region).
 		WithMaxRetries(10).
 		WithS3ForcePathStyle(true)
 	if u.cfg.Endpoint != "" {
