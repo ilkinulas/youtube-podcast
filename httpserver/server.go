@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/ilkinulas/youtube-podcast/storage"
+	"github.com/ilkinulas/youtube-podcast/config"
 )
 
 type Server struct {
@@ -16,11 +17,11 @@ type Server struct {
 	storage    storage.Storage
 }
 
-func NewServer(ctx context.Context, listenAddr string, logger *log.Logger, storage storage.Storage) *Server {
+func NewServer(ctx context.Context, listenAddr string, logger *log.Logger, storage storage.Storage, cfg config.Config) *Server {
 	router := http.NewServeMux()
 	router.Handle("/", Index())
 	router.Handle("/save", SaveUrl(storage))
-	router.Handle("/rss", Rss(logger, storage))
+	router.Handle("/rss", Rss(logger, storage, cfg.Podcast))
 
 	server := &http.Server{
 		Addr:         listenAddr,

@@ -28,4 +28,3 @@ Video downloader:
 Requirements
  * pip install pafy
  * pip install youtube-dl
-

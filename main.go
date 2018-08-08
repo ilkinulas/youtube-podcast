@@ -50,7 +50,7 @@ func main() {
 	downloadService := service.NewService(ctx, storage, downloader, uploader, logger)
 	go downloadService.Loop()
 
-	server := httpserver.NewServer(ctx, cfg.ListenAddr, logger, storage)
+	server := httpserver.NewServer(ctx, cfg.ListenAddr, logger, storage, *cfg)
 	if err := server.Start(); err != nil && err != http.ErrServerClosed {
 		logger.Fatalf("Failed to start http server at %v, %v", cfg.ListenAddr, err)
 	}

@@ -9,6 +9,7 @@ import (
 	"log"
 	"github.com/ilkinulas/youtube-podcast/version"
 	"time"
+	"github.com/ilkinulas/youtube-podcast/config"
 )
 
 func SaveUrl(storage storage.Storage) http.Handler {
@@ -28,7 +29,7 @@ func SaveUrl(storage storage.Storage) http.Handler {
 	})
 }
 
-func Rss(log *log.Logger, storage storage.Storage) http.Handler {
+func Rss(log *log.Logger, storage storage.Storage, cfg config.Podcast) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		videos, err := storage.SelectVideos()
 		if err != nil {
@@ -36,7 +37,15 @@ func Rss(log *log.Logger, storage storage.Storage) http.Handler {
 			return
 		}
 		feed := &feeds.Feed{
-			Title: "Ilkin's youtube podcast",
+			Title:       cfg.Title,
+			Description: cfg.Description,
+			Author: &feeds.Author{
+				Name:  cfg.AuthorName,
+				Email: cfg.AuthorEmail,
+			},
+			Image: &feeds.Image{
+				Url: cfg.ImageUrl,
+			},
 			Link: &feeds.Link{
 				Href: "https://ilkinulas.github.io",
 			},
@@ -50,7 +59,7 @@ func Rss(log *log.Logger, storage storage.Storage) http.Handler {
 				Link: &feeds.Link{
 					Href: video.PublicUrl,
 				},
-				Id: "test1",
+				Id:      "test1",
 				Created: time.Now(),
 				Updated: time.Now(),
 				Enclosure: &feeds.Enclosure{

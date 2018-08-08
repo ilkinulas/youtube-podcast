@@ -9,6 +9,7 @@ type Config struct {
 	ListenAddr string
 	DbFile     string
 	S3         S3
+	Podcast    Podcast
 }
 
 type S3 struct {
@@ -18,6 +19,14 @@ type S3 struct {
 	Key                  string
 	Secret               string
 	PresignedUrlDuration duration
+}
+
+type Podcast struct {
+	Title       string
+	Description string
+	AuthorName  string
+	AuthorEmail string
+	ImageUrl    string
 }
 
 func LoadConfig(configFile string) (*Config, error) {
