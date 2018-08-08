@@ -5,6 +5,7 @@ import (
 	"os/exec"
 
 	"github.com/ilkinulas/youtube-podcast/storage"
+	"os"
 )
 
 type Downloader interface {
@@ -22,7 +23,11 @@ type PythonDownloader struct {
 }
 
 func (d *PythonDownloader) Download(url string) (*storage.Video, error) {
-	out, err := exec.Command("./youtube_download.py", url).Output()
+	command := exec.Command("./youtube_download.py", url)
+	command.Stdout = os.Stdout
+	command.Stderr = os.Stderr
+	out, err := command.Output()
+
 	if err != nil {
 		return nil, err
 	}
