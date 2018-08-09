@@ -6,8 +6,9 @@ import (
 	"log"
 	"time"
 
-	"github.com/ilkinulas/youtube-podcast/storage"
 	"os"
+
+	"github.com/ilkinulas/youtube-podcast/storage"
 )
 
 type Service struct {

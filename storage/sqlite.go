@@ -4,8 +4,9 @@ import (
 	"database/sql"
 	"sync"
 
-	_ "github.com/mattn/go-sqlite3"
 	"time"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 const (

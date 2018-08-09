@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/ilkinulas/youtube-podcast/storage"
 	"github.com/ilkinulas/youtube-podcast/config"
+	"github.com/ilkinulas/youtube-podcast/storage"
 )
 
 type Server struct {
