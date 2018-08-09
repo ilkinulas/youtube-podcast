@@ -7,7 +7,7 @@ Region = ""
 Bucket = ""
 Key = ""
 Secret = ""
-PresignedUrlDuration = "1h30m"
+PresignedUrlDuration = "720h" # 4 weeks
 
 [Podcast]
 Title = "ilkin's youtube podcast"
